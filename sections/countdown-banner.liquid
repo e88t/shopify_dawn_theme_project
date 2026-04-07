@@ -1,0 +1,209 @@
+<section class="countdown-banner color-{{ section.settings.color_scheme }} {{ section.settings.custom_class }}">
+  <div class="page-width">
+    
+    <div class="countdown-banner__inner">
+      <div class="countdown-banner__left">
+        <h3 class="countdown-banner__eyebrow">
+          {{ section.settings.heading | default: 'Limited time only' }}
+        </h3>
+        <p class="countdown-banner__heading">
+          {{ section.settings.subheading | default: 'Sale up to 40% off' }}
+        </p>
+
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a href="{{ section.settings.button_link }}" class="button countdown-banner__button">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="countdown-banner__right">
+        <div
+          class="countdown-timer"
+          data-end-date="{{ section.settings.end_date | strip | replace: ' ', 'T' }}"
+          aria-label="Countdown timer"
+        >
+          <div class="countdown-timer__row" aria-hidden="true">
+            <span class="countdown-timer__value days">00</span>
+            <span class="countdown-timer__sep">:</span>
+            <span class="countdown-timer__value hours">00</span>
+            <span class="countdown-timer__sep">:</span>
+            <span class="countdown-timer__value minutes">00</span>
+            <span class="countdown-timer__sep">:</span>
+            <span class="countdown-timer__value seconds">00</span>
+          </div>
+
+          <div class="countdown-timer__labels" aria-hidden="true">
+            <span class="countdown-timer__label">day</span>
+            <span class="countdown-timer__label">hour</span>
+            <span class="countdown-timer__label">min</span>
+            <span class="countdown-timer__label">sec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{%- style -%}
+  .countdown-banner__inner {
+    display: flex;
+    align-items: center;
+  }
+
+  .countdown-banner__left {
+    flex: 1 1 auto;
+    max-width: 640px;
+  }
+
+  .countdown-banner__eyebrow {
+    margin: 0 0 8px 0;
+  }
+
+  .countdown-banner__heading {
+    margin: 0 0 16px 0;
+    font-size: 2.6rem;
+    text-transform: uppercase;
+  }
+
+  .countdown-banner__button {
+    margin-top: 8px;
+  }
+
+  .countdown-banner__right {
+    flex: 0 0 auto;
+  }
+
+  .countdown-timer__row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: baseline;
+    column-gap: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown-timer__value {
+    min-width: 6rem;
+    text-align: center;
+    font-size: 2.8rem;
+    line-height: 1;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  .countdown-timer__sep {
+    font-size: 2.8rem;
+    line-height: 1;
+    opacity: 0.8;
+  }
+
+  .countdown-timer__labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-top: 10px;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .countdown-timer__label {
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .countdown-banner {
+        padding: 40px 160px;
+        margin: 0 auto;
+        max-width: 144rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .countdown-banner {
+      padding: 28px 0;
+    }
+
+    .countdown-banner__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .countdown-banner__left {
+        width: 100%;
+        max-width: none;
+        flex: none;
+    }
+
+    .countdown-banner__eyebrow, .countdown-banner__heading {
+        text-align: center;
+    }
+
+    .countdown-banner__right {
+      width: 100%;
+    }
+
+    .countdown-timer__row {
+      width: 100%;
+      justify-items: center;
+    }
+
+    .countdown-timer__labels {
+      width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Countdown Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Top line (eyebrow)",
+      "default": "Sale ends in:"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Main heading",
+      "default": "Sale up to 40% off"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End date (YYYY-MM-DD HH:MM:SS)",
+      "default": "2026-12-31 23:59:59"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "text",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-6"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom CSS class"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Banner"
+    }
+  ]
+}
+{% endschema %}

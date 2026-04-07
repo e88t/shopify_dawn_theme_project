@@ -15,6 +15,77 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+    .footer-block--newsletter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+    @media screen and (min-width: 750px) {
+      .footer-block--logo-text img {
+        width: 70%;
+      }
+      .footer-block--logo-text h5{
+        margin-left: 50px;
+      }
+    }
+
+  @media only screen and (max-width: 749px) {
+    .footer-block--logo-text {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .footer-block--logo-text img{
+      width: 50%;
+      order: 1;
+    }
+    .footer-block--logo-text h3{
+      width: 50%;
+      order: 2;
+      text-align: center;
+    }
+    .footer-block--logo-text h5{
+      width: 50%;
+      order: 3;
+    }
+    .footer__list-social {
+      width: 50%;
+      order: 4;
+    }
+    .list-social__link {
+      padding: 5px;
+    }
+  }
+
+  .footer-block--menu .footer-block__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .newsletter__heading {
+    text-transform: none;
+  }
+
+  .footer-block--menu .footer-block__heading::after{
+    content:"+";
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: auto;
+    transition: transform .3s ease;
+  }
+
+  .footer-block__details.active .footer-block__heading::after {
+    content: "−";
+  }
+
+  .footer-block--menu .footer-block__details-content{
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .35s ease;
+}
+
+
   @media screen and (min-width: 750px) {
     .footer {
       margin-top: {{ section.settings.margin_top }}px;
@@ -24,13 +95,32 @@
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+
+    .footer-block--logo-text h3 {
+      font-weight: 700;
+      letter-spacing: 24%;
+      margin: 75px 0 0 15px;
+    }
+
+    .footer-block--menu .footer-block__heading {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .footer-block--menu .footer-block__heading::after {
+      display: none;
+    }
+
+    .footer-block--menu .footer-block__details-content {
+      max-height: none;
+    }
   }
 {%- endstyle -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {%- liquid
     assign has_social_icons = true
-    if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+    if settings.social_facebook_link == blank and settings.social_linkedin_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
       assign has_social_icons = false
     endif
 
@@ -76,7 +166,7 @@
                 {% endif %}
               >
                 {%- if block.settings.heading != blank -%}
-                  <h2 class="footer-block__heading inline-richtext">{{- block.settings.heading -}}</h2>
+                  {% comment %}  <h2 class="footer-block__heading inline-richtext">{{- block.settings.heading -}}</h2> {% endcomment %}
                 {%- endif -%}
 
                 {%- case block.type -%}
@@ -87,7 +177,26 @@
                       {{ block.settings.subtext }}
                     </div>
                   {%- when 'link_list' -%}
-                    {%- if block.settings.menu != blank -%}
+                  {%- if block.settings.menu != blank -%}
+                    <div  class="footer-block__details">
+                      <h4  class="footer-block__heading inline-richtext">
+                        {{ block.settings.heading }}
+                      </h4>
+                      <ul class="footer-block__details-content list-unstyled">
+                        {%- for link in block.settings.menu.links -%}
+                          <li>
+                            <a
+                              href="{{ link.url }}"
+                              class="link link--text list-menu__item list-menu__item--link"
+                            >
+                              {{ link.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div >
+
+                      {% comment %}
                       <ul class="footer-block__details-content list-unstyled">
                         {%- for link in block.settings.menu.links -%}
                           <li>
@@ -99,7 +208,7 @@
                             </a>
                           </li>
                         {%- endfor -%}
-                      </ul>
+                      </ul> {% endcomment %}
                     {%- endif -%}
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">
@@ -155,12 +264,28 @@
                     </div>
                 {%- endcase -%}
               </div>
+              {% if block.type == 'logo_text' %}
+                <div class="footer-block grid__item footer-block--logo-text">
+                  
+                  {% if block.settings.logo != blank %}
+                    <img
+                      src="{{ block.settings.logo | image_url: width: 200 }}"
+                      alt="{{ shop.name }}"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                  {% if block.settings.description != blank %}
+                    <h5>{{ block.settings.description }}</h5>
+                  {% endif %}
+                  {%- if section.settings.show_social and has_social_icons -%}
+                    <h3>FOLLOW US</h3>
+                    {%- render 'social-icons', class: 'footer__list-social' -%}
+                  {%- endif -%}
+                </div>
+              {% endif %}
             {%- endfor -%}
-          </div>
-        {%- endif -%}
-
-        <div
-          class="footer-block--newsletter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                      <div
+          class="footer-block grid__item footer-block--newsletter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
           {% endif %}
@@ -168,7 +293,8 @@
           {%- if section.settings.newsletter_enable -%}
             <div class="footer-block__newsletter">
               {%- if section.settings.newsletter_heading != blank -%}
-                <h2 class="footer-block__heading inline-richtext">{{ section.settings.newsletter_heading }}</h2>
+                <h4 class="footer-block__heading newsletter__heading inline-richtext">{{ section.settings.newsletter_heading }}</h4>
+                <p class="description">Sign up to be first to hear about new products and excluive offers</p>
               {%- endif -%}
               {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
                 <input type="hidden" name="contact[tags]" value="newsletter">
@@ -203,10 +329,12 @@
                       name="commit"
                       id="Subscribe"
                       aria-label="{{ 'newsletter.button_label' | t }}"
-                    >
-                      <span class="svg-wrapper">
+                    > SUBSCRIBE
+                    {% comment %}
+                     <span class="svg-wrapper">
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
-                      </span>
+                      </span> 
+                    {% endcomment %}
                     </button>
                   </div>
                   {%- if form.errors -%}
@@ -241,11 +369,9 @@
               {{ shop | login_button: action: 'follow' }}
             </div>
           {%- endif -%}
-
-          {%- if section.settings.show_social and has_social_icons -%}
-            {%- render 'social-icons', class: 'footer__list-social' -%}
-          {%- endif -%}
         </div>
+          </div>
+        {%- endif -%}
       </div>
     {%- endunless -%}
   {%- endif -%}
@@ -269,17 +395,36 @@
           </localization-form>
         {%- endif -%}
 
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <localization-form>
-            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="caption-large text-body" id="FooterLanguageLabel">
-                  {{ 'localization.language_label' | t }}
-                </h2>
-                {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
+          {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+            <localization-form>
+              {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+                <div>
+                 {%- comment -%} <h2 class="caption-large text-body" id="FooterLanguageLabel">
+                    {{ 'localization.language_label' | t }}
+                  </h2>  {%- endcomment -%}
+                  {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+                </div>
+              {%- endform -%}
+            </localization-form>
+          {%- endif -%}
+
+      </div>
+            <div class="footer__copyright caption">
+        <small class="copyright__content"
+          >&copy; {{ 'now' | date: '%Y' }} - DORINA
+        </small>
+        {%- if section.settings.show_policy -%}
+          <ul class="policies list-unstyled">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li>
+                  <small class="copyright__content"
+                    ><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small
+                  >
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
         {%- endif -%}
       </div>
       <div class="footer__column footer__column--info">
@@ -297,27 +442,9 @@
         {%- endif -%}
       </div>
     </div>
+    {% comment %}
     <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
-      <div class="footer__copyright caption">
-        <small class="copyright__content"
-          >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
-        </small>
-        <small class="copyright__content">{{ powered_by_link }}</small>
-        {%- if section.settings.show_policy -%}
-          <ul class="policies list-unstyled">
-            {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
-                <li>
-                  <small class="copyright__content"
-                    ><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small
-                  >
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-      </div>
-    </div>
+    </div>{% endcomment %}
   </div>
 </footer>
 
@@ -421,7 +548,23 @@
           "default": "center"
         }
       ]
+    },
+    {
+  "type": "logo_text",
+  "name": "Logo + text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description"
     }
+  ]
+}
   ],
   "settings": [
     {

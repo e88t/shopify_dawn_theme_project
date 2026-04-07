@@ -1,75 +1,239 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "collage_3XMPUx": {
+      "type": "collage",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "image_PgbNHW": {
+          "type": "image",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "image": "shopify://shop_images/watch-and-gloves-on-hand-pointing.jpg"
           }
         },
-        "button": {
-          "type": "buttons",
+        "image_ahkfUa": {
+          "type": "image",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify://shop_images/bohemian-woman-long-hair.jpg"
+          }
+        },
+        "image_cdEDRA": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/makeup-and-jewelry.jpg"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "image_PgbNHW",
+        "image_ahkfUa",
+        "image_cdEDRA"
       ],
+      "name": "Collage HP 1",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "custom_class": "full-width-collage",
+        "heading": "",
+        "heading_size": "h1",
+        "desktop_layout": "left",
+        "mobile_layout": "column",
+        "card_styles": "product-card-wrapper",
+        "color_scheme": "",
+        "padding_top": 12,
+        "padding_bottom": 12
       }
     },
     "featured_collection": {
       "type": "featured-collection",
+      "name": "BEST SELLERS",
       "settings": {
-        "title": "Featured products",
+        "collection": "all",
+        "products_to_show": 4,
+        "title": "BEST SELLERS",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "enable_desktop_slider": false,
         "full_width": false,
         "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
+        "view_all_style": "link",
+        "color_scheme": "scheme-d1c4c200-1f43-44a0-8450-ed51a4fefdf9",
+        "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
+        "swipe_on_mobile": false,
         "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
+    "countdown_banner_8rwQYV": {
+      "type": "countdown-banner",
+      "disabled": true,
+      "name": "Countdown Banner",
+      "settings": {
+        "heading": "Limited time only",
+        "subheading": "Sale up to 40% off",
+        "end_date": "2026-03-20 23:59:59",
+        "button_label": "SHOP NOW",
+        "button_link": "https://www.flashscore.com/",
+        "color_scheme": "scheme-49efe555-b567-43dc-9d82-2250040063ff",
+        "custom_class": ""
+      }
+    },
+    "rich_text_jVRbaN": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_mQxekt": {
+          "type": "heading",
+          "settings": {
+            "heading": "LIMITED TIME ONLY",
+            "heading_size": "h2"
+          }
+        },
+        "text_EaqAT7": {
+          "type": "text",
+          "settings": {
+            "text": "<p>SALE UP TO 40% OFF</p>"
+          }
+        },
+        "button_E6m6TG": {
+          "type": "button",
+          "settings": {
+            "button_label": "SHOP NOW",
+            "button_link": "https://elogic.peopleforce.io/dashboards",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        },
+        "timer_xtkNLH": {
+          "type": "timer",
+          "settings": {
+            "end_date": "2026-03-20 23:59:59",
+            "custom_class": "countdown_timer"
+          }
+        }
+      },
+      "block_order": [
+        "heading_mQxekt",
+        "text_EaqAT7",
+        "button_E6m6TG",
+        "timer_xtkNLH"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-49efe555-b567-43dc-9d82-2250040063ff",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "featured_collection_EjzJjT": {
+      "type": "featured-collection",
+      "name": "NEW ARRIVED",
+      "settings": {
+        "collection": "necklaces",
+        "products_to_show": 4,
+        "title": "NEW ARRIVED",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "link",
+        "color_scheme": "scheme-d1c4c200-1f43-44a0-8450-ed51a4fefdf9",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collection_list_QBRVda": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_QABrb8": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "necklaces"
+          }
+        },
+        "featured_collection_Dqm7Y9": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "super-new-collection"
+          }
+        },
+        "featured_collection_RmGU9i": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings"
+          }
+        },
+        "featured_collection_XnR4Ar": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "chokers"
+          }
+        },
+        "featured_collection_7jqAX6": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bracelets"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_QABrb8",
+        "featured_collection_Dqm7Y9",
+        "featured_collection_RmGU9i",
+        "featured_collection_XnR4Ar",
+        "featured_collection_7jqAX6"
+      ],
+      "name": "t:sections.collection-list.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "scheme-d1c4c200-1f43-44a0-8450-ed51a4fefdf9",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
         "padding_bottom": 36
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "collage_3XMPUx",
+    "featured_collection",
+    "countdown_banner_8rwQYV",
+    "rich_text_jVRbaN",
+    "featured_collection_EjzJjT",
+    "collection_list_QBRVda"
   ]
 }

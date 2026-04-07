@@ -109,6 +109,22 @@
         "content": "t:settings_schema.typography.settings.header__1.content"
       },
       {
+        "type": "select",
+        "id": "custom_font_select",
+        "label": "Custom Font",
+        "options": [
+          {
+            "value": "system",
+            "label": "Default theme font"
+          },
+          {
+            "value": "MyCustomFont",
+            "label": "My Custom Font"
+          }
+        ],
+        "default": "system"
+      },
+      {
         "type": "font_picker",
         "id": "type_header_font",
         "default": "assistant_n4",
@@ -154,7 +170,7 @@
         "id": "page_width",
         "min": 1000,
         "max": 1600,
-        "step": 100,
+        "step": 20,
         "default": 1200,
         "unit": "px",
         "label": "t:settings_schema.layout.settings.page_width.label"
@@ -1246,11 +1262,11 @@
         "type": "range",
         "id": "badge_corner_radius",
         "min": 0,
-        "max": 38,
+        "max": 40,
         "step": 2,
         "unit": "px",
         "label": "t:settings_schema.global.settings.corner_radius.label",
-        "default": 38
+        "default": 40
       },
       {
         "type": "color_scheme",
@@ -1308,6 +1324,12 @@
         "id": "social_facebook_link",
         "label": "t:settings_schema.social-media.settings.social_facebook_link.label",
         "placeholder": "t:settings_schema.social-media.settings.social_facebook_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin_link",
+        "label": "LinkedIn",
+        "placeholder": "https://linkedin.com/company/your-company"
       },
       {
         "type": "text",

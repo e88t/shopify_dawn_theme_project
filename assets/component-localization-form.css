@@ -19,6 +19,12 @@
   flex-grow: 1;
 }
 
+.language-flag img {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+}
+
 @media screen and (min-width: 750px) {
   .localization-form {
     padding: 1rem 2rem 1rem 0;
@@ -80,8 +86,8 @@
   position: absolute;
   content: '';
   height: 0.6rem;
-  right: calc(var(--inputs-border-width) + 1.5rem);
-  top: calc(50% - 0.2rem);
+  right: 22px;
+  top: 15px;
 }
 
 .localization-selector.link {
@@ -386,9 +392,10 @@
 }
 
 .js .header-localization:not(.menu-drawer__localization) .localization-form__select {
-  padding: 0 2.7rem 0 1.2rem;
-  width: max-content;
+  padding: 0 1rem 0 1rem;
+  width: 4.4rem;
   height: 3.8rem;
+  min-width: unset;
 }
 
 .header-localization:not(.menu-drawer__localization) .localization-form:only-child .localization-form__select {

@@ -12,9 +12,48 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Countdown timer block (shared markup with countdown-banner) */
+  .section-{{ section.id }}-padding .countdown-timer__row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: baseline;
+    column-gap: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .section-{{ section.id }}-padding .countdown-timer__value {
+    min-width: 6rem;
+    text-align: center;
+    font-size: 2.8rem;
+    line-height: 1;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  .section-{{ section.id }}-padding .countdown-timer__sep {
+    font-size: 2.8rem;
+    line-height: 1;
+    opacity: 0.8;
+  }
+
+  .section-{{ section.id }}-padding .countdown-timer__labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-top: 10px;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .section-{{ section.id }}-padding .countdown-timer__label {
+    text-align: center;
+  }
 {%- endstyle -%}
 
-<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}{% unless block.settings.custom_class == 'countdown_timer' %} countdown_timer{% endunless %}">
   <div class="rich-text content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} rich-text--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
     <div class="rich-text__wrapper rich-text__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
       <div class="rich-text__blocks {{ section.settings.content_alignment }}">
@@ -86,6 +125,29 @@
                     {{- block.settings.button_label_2 | escape -}}
                   </a>
                 {%- endif -%}
+              </div>
+            {%- when 'timer' -%}
+              <div class="rich-text__timer">
+                <div
+                  class="countdown-timer"
+                  data-end-date="{{ block.settings.end_date | strip | replace: ' ', 'T' }}"
+                >
+                  <div class="countdown-timer__row" aria-hidden="true">
+                    <span class="countdown-timer__value days">00</span>
+                    <span class="countdown-timer__sep">:</span>
+                    <span class="countdown-timer__value hours">00</span>
+                    <span class="countdown-timer__sep">:</span>
+                    <span class="countdown-timer__value minutes">00</span>
+                    <span class="countdown-timer__sep">:</span>
+                    <span class="countdown-timer__value seconds">00</span>
+                  </div>
+                  <div class="countdown-timer__labels" aria-hidden="true">
+                    <span class="countdown-timer__label">day</span>
+                    <span class="countdown-timer__label">hour</span>
+                    <span class="countdown-timer__label">min</span>
+                    <span class="countdown-timer__label">sec</span>
+                  </div>
+                </div>
               </div>
           {%- endcase -%}
         {%- endfor -%}
@@ -334,6 +396,25 @@
         }
       ]
     }
+    ,
+    {
+      "type": "timer",
+      "name": "Countdown timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "end_date",
+          "label": "End date (YYYY-MM-DD HH:MM:SS)",
+          "default": "2026-12-31 23:59:59"
+        },
+        {
+          "type": "text",
+          "id": "custom_class",
+          "label": "Custom CSS class"
+        }
+      ]
+    }
   ],
   "presets": [
     {
@@ -347,6 +428,9 @@
         },
         {
           "type": "button"
+        },
+        {
+          "type": "timer"
         }
       ]
     }
