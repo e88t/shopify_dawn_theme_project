@@ -1,0 +1,490 @@
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .collection-desktop-slider {
+    overflow: hidden;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  .collection-desktop-slider.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .collection-desktop-slider__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .collection-desktop-slider__item {
+    flex: 0 0 264px;
+  }
+
+  .collection-desktop-slider__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .collection-desktop-slider__media {
+    width: 264px;
+    height: 290px;
+    aspect-ratio: auto;
+    background: rgba(var(--color-foreground), 0.06);
+    overflow: hidden;
+  }
+
+  .collection-desktop-slider__media img,
+  .collection-desktop-slider__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .collection-desktop-slider__title {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 1.6rem;
+    line-height: 1.3;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  .collection-desktop-slider.grid--peek {
+    padding-right: 132px;
+  }
+
+  .collection-desktop-slider__dots {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .collection-desktop-slider__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(var(--color-foreground), 0.25);
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .collection-desktop-slider__dot.is-active {
+    background: rgb(var(--color-foreground));
+  }
+
+  @media screen and (min-width: 990px) {
+    .section-collection-desktop-slider .page-width {
+      max-width: none;
+      margin: 0;
+    }
+
+    .collection-desktop-slider__list {
+      gap: 33px;
+      width: max-content;
+    }
+
+    .collection-desktop-slider__item {
+      flex-basis: 416px;
+    }
+
+    .collection-desktop-slider__media {
+      width: 416px;
+      height: 515px;
+      aspect-ratio: auto;
+    }
+
+    .collection-desktop-slider__dots {
+      display: none;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="collection-desktop-slider grid--peek" id="DesktopCollectionSlider-{{ section.id }}">
+      <ul class="collection-desktop-slider__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="collection-desktop-slider__item" {{ block.shopify_attributes }}>
+            {%- assign collection_item = block.settings.collection -%}
+            <a
+              {% if collection_item != blank %}
+                href="{{ collection_item.url }}"
+              {% else %}
+                role="link" aria-disabled="true"
+              {% endif %}
+              class="collection-desktop-slider__link"
+            >
+              <div class="collection-desktop-slider__media">
+                {%- if collection_item != blank and collection_item.featured_image != blank -%}
+                  {{
+                    collection_item.featured_image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '416, 600, 900',
+                      sizes: '(min-width: 990px) 416px, 70vw',
+                      alt: collection_item.title
+                  }}
+                {%- else -%}
+                  {{ 'collection-apparel-1' | placeholder_svg_tag }}
+                {%- endif -%}
+              </div>
+              <p class="collection-desktop-slider__title">
+                {%- if collection_item != blank -%}
+                  {{ collection_item.title }}
+                {%- else -%}
+                  {{ 'onboarding.collection_title' | t }}
+                {%- endif -%}
+              </p>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="collection-desktop-slider__dots" id="DesktopCollectionSliderDots-{{ section.id }}" aria-label="Slider pagination"></div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const slider = document.getElementById('DesktopCollectionSlider-{{ section.id }}');
+    const dotsContainer = document.getElementById('DesktopCollectionSliderDots-{{ section.id }}');
+    if (!slider || !dotsContainer) return;
+
+    const list = slider.querySelector('.collection-desktop-slider__list');
+    if (!list) return;
+
+    const originalSlides = Array.from(list.querySelectorAll('.collection-desktop-slider__item'));
+    const realSlidesCount = originalSlides.length;
+    if (!realSlidesCount) return;
+
+    // Slick-like infinite loop: prepend full clone set and append full clone set.
+    if (realSlidesCount > 1) {
+      const prependFrag = document.createDocumentFragment();
+      const appendFrag = document.createDocumentFragment();
+      originalSlides.forEach((slide) => {
+        const cloneBefore = slide.cloneNode(true);
+        cloneBefore.setAttribute('data-clone', 'true');
+        prependFrag.appendChild(cloneBefore);
+        const cloneAfter = slide.cloneNode(true);
+        cloneAfter.setAttribute('data-clone', 'true');
+        appendFrag.appendChild(cloneAfter);
+      });
+      list.insertBefore(prependFrag, list.firstChild);
+      list.appendChild(appendFrag);
+    }
+
+    let isDown = false;
+    let isDragging = false;
+    let startX = 0;
+    let startTranslate = 0;
+    let movedDistance = 0;
+    let suppressClickUntil = 0;
+    let dots = [];
+    const mobileMedia = window.matchMedia('(max-width: 989px)');
+    let currentIndex = realSlidesCount > 1 ? realSlidesCount : 0;
+    let currentTranslate = 0;
+    let step = 0;
+    let isTransitioning = false;
+
+    const getRenderedSlides = () => Array.from(list.querySelectorAll('.collection-desktop-slider__item'));
+
+    const computeStep = () => {
+      const renderedSlides = getRenderedSlides();
+      if (renderedSlides.length < 2) {
+        step = renderedSlides[0]?.getBoundingClientRect().width || 1;
+        return;
+      }
+      step = renderedSlides[1].offsetLeft - renderedSlides[0].offsetLeft;
+    };
+
+    const getCurrentRealIndex = () => {
+      if (realSlidesCount <= 1) return 0;
+      const normalized = ((currentIndex - realSlidesCount) % realSlidesCount + realSlidesCount) % realSlidesCount;
+      return normalized;
+    };
+
+    const setTrackPosition = (withTransition) => {
+      if (withTransition) {
+        list.style.transition = 'transform 360ms ease';
+        isTransitioning = true;
+      } else {
+        list.style.transition = 'none';
+        isTransitioning = false;
+      }
+      currentTranslate = -currentIndex * step;
+      list.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
+      setActiveDot();
+    };
+
+    const getPages = () => {
+      return realSlidesCount;
+    };
+
+    const setActiveDot = () => {
+      if (!dots.length) return;
+      const activeIndex = getCurrentRealIndex();
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('is-active', index === activeIndex);
+        dot.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
+      });
+    };
+
+    const renderDots = () => {
+      if (!mobileMedia.matches) {
+        dotsContainer.innerHTML = '';
+        dots = [];
+        return;
+      }
+
+      const pages = getPages();
+      dotsContainer.innerHTML = '';
+      dots = [];
+
+      for (let i = 0; i < pages; i += 1) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'collection-desktop-slider__dot';
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex = realSlidesCount > 1 ? realSlidesCount + i : i;
+          setTrackPosition(true);
+        });
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+      }
+
+      setActiveDot();
+    };
+
+    const onMouseDown = (event) => {
+      // Keep native touch scrolling on mobile; custom drag is desktop-only.
+      if (window.matchMedia('(max-width: 989px)').matches) return;
+      if (event.button !== 0) return;
+      if (isTransitioning) return;
+      isDown = true;
+      isDragging = false;
+      movedDistance = 0;
+      startX = event.clientX;
+      startTranslate = currentTranslate;
+      slider.classList.add('is-dragging');
+      list.style.transition = 'none';
+      event.preventDefault();
+    };
+
+    const onMouseMove = (event) => {
+      if (!isDown) return;
+      if (isTransitioning) return;
+      const delta = event.clientX - startX;
+      movedDistance = Math.max(movedDistance, Math.abs(delta));
+      if (Math.abs(delta) > 3) isDragging = true;
+      if (isDragging) event.preventDefault();
+      list.style.transform = `translate3d(${startTranslate + delta}px, 0, 0)`;
+    };
+
+    const onTouchStart = (event) => {
+      if (isTransitioning) return;
+      const touch = event.touches && event.touches[0];
+      if (!touch) return;
+      isDown = true;
+      isDragging = false;
+      movedDistance = 0;
+      startX = touch.clientX;
+      startTranslate = currentTranslate;
+      list.style.transition = 'none';
+    };
+
+    const onTouchMove = (event) => {
+      if (!isDown || isTransitioning) return;
+      const touch = event.touches && event.touches[0];
+      if (!touch) return;
+      const delta = touch.clientX - startX;
+      movedDistance = Math.max(movedDistance, Math.abs(delta));
+      if (Math.abs(delta) > 3) isDragging = true;
+      if (isDragging) event.preventDefault();
+      list.style.transform = `translate3d(${startTranslate + delta}px, 0, 0)`;
+    };
+
+    const normalizeLoopIfNeeded = () => {
+      if (realSlidesCount <= 1) return;
+      if (currentIndex >= realSlidesCount * 2) {
+        currentIndex -= realSlidesCount;
+        setTrackPosition(false);
+      } else if (currentIndex < realSlidesCount) {
+        currentIndex += realSlidesCount;
+        setTrackPosition(false);
+      }
+    };
+
+    const onMouseUp = (event) => {
+      if (!isDown) return;
+      isDown = false;
+      slider.classList.remove('is-dragging');
+      const clientX = event && typeof event.clientX === 'number' ? event.clientX : startX;
+      const delta = clientX - startX;
+      if (movedDistance > 6) {
+        suppressClickUntil = Date.now() + 300;
+      }
+      if (step <= 0) {
+        setTrackPosition(false);
+        return;
+      }
+      const movedSteps = Math.round((startTranslate - (startTranslate + delta)) / step);
+      if (movedDistance > 6 && movedSteps !== 0) {
+        currentIndex += movedSteps;
+      }
+      setTrackPosition(true);
+      isDragging = false;
+    };
+
+    const onTouchEnd = (event) => {
+      if (!isDown) return;
+      const touch = event.changedTouches && event.changedTouches[0];
+      const clientX = touch && typeof touch.clientX === 'number' ? touch.clientX : startX;
+      onMouseUp({ clientX });
+    };
+
+    const onWindowBlur = () => {
+      if (!isDown) return;
+      isDown = false;
+      slider.classList.remove('is-dragging');
+      setTrackPosition(true);
+      isDragging = false;
+    };
+
+    slider.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    slider.addEventListener('touchstart', onTouchStart, { passive: true });
+    slider.addEventListener('touchmove', onTouchMove, { passive: false });
+    slider.addEventListener('touchend', onTouchEnd, { passive: true });
+    slider.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    window.addEventListener('blur', onWindowBlur);
+    slider.addEventListener('dragstart', (event) => event.preventDefault());
+    slider.addEventListener(
+      'click',
+      (event) => {
+        const link = event.target.closest('.collection-desktop-slider__link');
+        if (!link) return;
+        if (Date.now() < suppressClickUntil || isDown || isDragging) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      true
+    );
+    list.addEventListener('transitionend', () => {
+      isTransitioning = false;
+      normalizeLoopIfNeeded();
+    });
+    window.addEventListener('resize', () => {
+      computeStep();
+      setTrackPosition(false);
+      renderDots();
+    });
+
+    computeStep();
+    setTrackPosition(false);
+    renderDots();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection desktop slider",
+  "tag": "section",
+  "class": "section section-collection-desktop-slider",
+  "max_blocks": 15,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection desktop slider",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

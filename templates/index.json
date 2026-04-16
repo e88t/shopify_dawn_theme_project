@@ -213,6 +213,7 @@
         "featured_collection_XnR4Ar",
         "featured_collection_7jqAX6"
       ],
+      "disabled": true,
       "name": "t:sections.collection-list.presets.name",
       "settings": {
         "title": "",
@@ -226,6 +227,103 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "collection_slider_mxNtXL": {
+      "type": "collection-slider",
+      "blocks": {
+        "collection_KDi3Vg": {
+          "type": "collection",
+          "settings": {
+            "collection": "super-new-collection"
+          }
+        },
+        "collection_jwLrd3": {
+          "type": "collection",
+          "settings": {
+            "collection": "necklaces"
+          }
+        },
+        "collection_kfmgrt": {
+          "type": "collection",
+          "settings": {
+            "collection": "earrings"
+          }
+        },
+        "collection_3fzcNx": {
+          "type": "collection",
+          "settings": {
+            "collection": "chokers"
+          }
+        },
+        "collection_iD6CG9": {
+          "type": "collection",
+          "settings": {
+            "collection": "bracelets"
+          }
+        }
+      },
+      "block_order": [
+        "collection_KDi3Vg",
+        "collection_jwLrd3",
+        "collection_kfmgrt",
+        "collection_3fzcNx",
+        "collection_iD6CG9"
+      ],
+      "disabled": true,
+      "name": "Collection Slider",
+      "settings": {
+        "slides_mobile": 1,
+        "slides_tablet": 2,
+        "slides_desktop": 4
+      }
+    },
+    "collection_list_desktop_slider_Xg46Fg": {
+      "type": "collection-list-desktop-slider",
+      "blocks": {
+        "featured_collection_mhYYQV": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bracelets"
+          }
+        },
+        "featured_collection_GbrHjW": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "chokers"
+          }
+        },
+        "featured_collection_JiDzrz": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings"
+          }
+        },
+        "featured_collection_KrBU8j": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "super-new-collection"
+          }
+        },
+        "featured_collection_MxnHBF": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "necklaces"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_mhYYQV",
+        "featured_collection_GbrHjW",
+        "featured_collection_JiDzrz",
+        "featured_collection_KrBU8j",
+        "featured_collection_MxnHBF"
+      ],
+      "name": "Collection desktop slider",
+      "settings": {
+        "color_scheme": "scheme-d1c4c200-1f43-44a0-8450-ed51a4fefdf9",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -234,6 +332,8 @@
     "countdown_banner_8rwQYV",
     "rich_text_jVRbaN",
     "featured_collection_EjzJjT",
-    "collection_list_QBRVda"
+    "collection_list_QBRVda",
+    "collection_slider_mxNtXL",
+    "collection_list_desktop_slider_Xg46Fg"
   ]
 }
